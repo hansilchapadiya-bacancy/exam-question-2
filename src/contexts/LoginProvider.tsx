@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { LoginContext, type FormDataType } from "./LoginContext";
 import { useNavigate } from "react-router-dom";
 
@@ -6,31 +6,25 @@ const LoginProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [formData, setFormData] = useState<FormDataType>({ username: "", password: "" });
     const [error, setError] = useState("");
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const handleLogin = async (data: FormDataType) => {
-            try {
-                setError("");
-                localStorage.setItem('username', 'emilys');
-                localStorage.setItem('password', 'pass');
-                setFormData(data);
-                navigate('/dashbord');
-            } catch (err) {
-                setError(JSON.stringify(err));
-                return err;
-            }
-        }
-        const { username, password } = formData;
+    const handleLogin = (data: FormDataType) => {
+        const { username, password } = data;
 
-        if (username && password) {
-            handleLogin({ username, password });
+        if (username === "emilys" && password === "pass") {
+            setError("");
+            localStorage.setItem("username", username);
+            localStorage.setItem("password", password);
+            navigate("/dashboard");
+            return;
         }
-    }, [formData, navigate])
+
+        setError("Invalid username or password");
+    };
 
 
     return (
-        <LoginContext.Provider value={{ formData, setFormData, error }}>
+        <LoginContext.Provider value={{ formData, setFormData, error, handleLogin }}>
             {children}
         </LoginContext.Provider>
     )

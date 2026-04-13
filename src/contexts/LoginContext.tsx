@@ -9,7 +9,8 @@ export type FormDataType = {
 type LoginContextType = {
     formData: FormDataType,
     setFormData: React.Dispatch<React.SetStateAction<FormDataType>>
-    error : string
+    error: string
+    handleLogin: (data: FormDataType) => void
 }
 
 
